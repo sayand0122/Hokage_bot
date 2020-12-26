@@ -26,12 +26,16 @@ async def on_ready():
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
 
+
 # ping it and it returns your latency
-
-
 @bot.command()
 async def ping(ctx):
     await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
+
+
+@bot.command()
+async def hi(ctx):
+    await ctx.send('hola')
 
 
 """
