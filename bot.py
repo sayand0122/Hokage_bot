@@ -1,9 +1,12 @@
 import discord
 from discord.ext import commands
+import dotenv
 
 from datetime import datetime
 
-from secrets import *
+from dotenv.main import load_dotenv
+
+load_dotenv()
 
 bot = commands.Bot(command_prefix='.')
 
