@@ -1,12 +1,13 @@
 import discord
-from discord.ext import commands
+import os
 import dotenv
 
+from discord.ext import commands
 from datetime import datetime
-
 from dotenv.main import load_dotenv
 
 load_dotenv()
+TOKEN = os.environ.get('SECRET')
 
 bot = commands.Bot(command_prefix='.')
 
@@ -19,6 +20,13 @@ async def on_ready():
     """
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
+
+# ping it and it returns your latency
+
+
+@bot.command()
+async def ping(ctx):
+    await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
 
 
 bot.run(TOKEN)
