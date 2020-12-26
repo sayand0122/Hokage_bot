@@ -10,7 +10,6 @@ class Music(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.queue = []
-        self.vc = ''
     
     @commands.command()
     async def play(self, ctx, playable):
@@ -18,12 +17,11 @@ class Music(commands.Cog):
             Plays song passed as an arguemnet 'playbale'.
         """
         try:
-            self.vc = ctx.author.voice.channel
-            await self.vc.connect()
+            vc = ctx.author.voice.channel
+            await vc.connect()
         except Exception as e:
             pass
         self.queue.append(playable)
-        await ctx.send(self.queue)
 
     
     @commands.command()
