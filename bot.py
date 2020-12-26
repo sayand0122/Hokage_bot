@@ -24,8 +24,12 @@ async def on_ready():
     """
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
-    
 
+
+"""
+    Loads cogs from ./cogs directory.
+    Make sure your file name starts with '_' if you dont want it to load just yet. 
+"""
 for cog in os.listdir(r"./cogs"):
     if cog.endswith(".py") and not cog.startswith("_"):
         try:
