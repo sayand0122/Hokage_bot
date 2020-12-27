@@ -26,32 +26,56 @@ async def on_ready():
     print(f"Started at {launch_time}")
 
 
+# clear commands and its error handling
+@bot.command()
+@commands.has_permissions(manage_messages=True)
+async def clear(ctx, amount: int):
+    await ctx.channel.purge(limit=amount)
+
+
+@clear.error
+async def clear_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("Please pass the amount to clear the number of data.")
+
 # maintaining cogs
+
+
 @bot.command()
 async def load(ctx, extension):
     bot.load_extension(f'cogs.{extension}')
 
 
-@bot.command(hidden=True)
-@commands.is_owner()
-async def reload(ctx, cog=None):
-    """
-        Hot reloading of cogs.
-    """
-    cog1 = ''
-    if cog is None:
-        for filename in os.listdir('./cogs'):
-            if filename.endswith('.py'):
-                bot.unload_extension(f'cogs.{filename[:-3]}')
-                bot.load_extension(f'cogs.{filename[:-3]}')
-                cog1 = 'all cogs'
+@bot.command()
+async def unload(ctx, extension):
+    bot.unload_exntension(f'cogs.{extension}')
 
-    else:
-        bot.unload_extension(f'cogs.{cog}')
-        bot.load_extension(f'cogs.{cog}')
-        cog1 = f'cog `{cog}`'
 
-    await ctx.send(f"Successfully reloaded {cog1}")
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        bot.load_extension(f'cogs.{filename[:-3]}')
+
+
+# @bot.command(hidden=True)
+# @commands.is_owner()
+# async def reload(ctx, cog=None):
+#     """
+#         Hot reloading of cogs.
+#     """
+#     cog1 = ''
+#     if cog is None:
+#         for filename in os.listdir('./cogs'):
+#             if filename.endswith('.py'):
+#                 bot.unload_extension(f'cogs.{filename[:-3]}')
+#                 bot.load_extension(f'cogs.{filename[:-3]}')
+#                 cog1 = 'all cogs'
+
+#     else:
+#         bot.unload_extension(f'cogs.{cog}')
+#         bot.load_extension(f'cogs.{cog}')
+#         cog1 = f'cog `{cog}`'
+
+#     await ctx.send(f"Successfully reloaded {cog1}")
 
 
 bot.run(DISCORD_TOKEN)
