@@ -54,17 +54,4 @@ async def reload(ctx, cog=None):
     await ctx.send(f"Successfully reloaded {cog}")
 
 
-"""
-    Loads cogs from ./cogs directory.
-    Make sure your file name starts with '_' if you dont want it to load just yet. 
-"""
-for cog in os.listdir(r"./cogs"):
-    if cog.endswith(".py") and not cog.startswith("_"):
-        try:
-            cog = f"cogs.{cog.replace('.py', '')}"
-            bot.load_extension(cog)
-        except Exception as e:
-            print(f"{cog} can not be loaded\n{e}")
-
-
 bot.run(DISCORD_TOKEN)
