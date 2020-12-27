@@ -1,6 +1,9 @@
 import asyncio
+from pprint import pprint
 
 from youtube_dl import YoutubeDL
+
+import validators
 
 import discord
 from discord.ext import commands
@@ -23,18 +26,23 @@ class Player(commands.Cog):
         }
     
     @commands.command()
-    async def play(self, ctx, url):
+    async def play(self, ctx, playable):
         """
-            Plays song passed as an arguemnet 'playbale'.
+            Plays song passed as an arguemnet 'playable'.
         """
-        try:
+        try:   
+            if validators.url(playable):
+                with YoutubeDL(self.YDL_OPTIONS) as ydl:
+                    info = ydl.extract_info(playable, download=False) 
+                URL = info['formats'][0]['url']
+            else:
+                with YoutubeDL(self.YDL_OPTIONS) as ydl:
+                    info = ydl.extract_info(playable, download=False)
+                URL = info['entries'][0]['formats'][0]['url']
+            print(f"url: {URL}")
+            
             vc = ctx.author.voice.channel
             vc = await vc.connect()
-            
-            with YoutubeDL(self.YDL_OPTIONS) as ydl:
-                info = ydl.extract_info(url, download=False)
-                
-            URL = info['formats'][0]['url']
             vc.play(FFmpegPCMAudio(URL, **self.FFMPEG_OPTIONS))
         except Exception as e:
             pass

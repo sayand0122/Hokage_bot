@@ -32,6 +32,7 @@ async def reload(ctx, cog=None):
     """
         Hot reloading of cogs.
     """
+    cog1 = ''
     if cog is None:
         for filename in os.listdir('./cogs'):
             if filename.endswith('.py'):
