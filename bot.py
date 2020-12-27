@@ -11,7 +11,7 @@ from dotenv.main import load_dotenv
     Initializes TOKEN as bot token.
 """
 load_dotenv()
-DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
+DISCORD_TOKEN = os.environ.get('SECRET')
 
 bot = commands.Bot(command_prefix='.')
 
@@ -28,30 +28,20 @@ async def on_ready():
 # maintaining cogs
 
 
+# maintaining cogs
 @bot.command()
 async def load(ctx, extension):
     bot.load_extension(f'cogs.{extension}')
 
 
-@bot.command(hidden=True)
-@commands.is_owner()
-async def reload(ctx, cog=None):
-    """
-        Hot reloading of cogs.
-    """
-    if cog is None:
-        for filename in os.listdir('./cogs'):
-            if filename.endswith('.py'):
-                bot.unload_extension(f'cogs.{filename[:-3]}')
-                bot.load_extension(f'cogs.{filename[:-3]}')
-                cog1 = 'all cogs'
+@bot.command()
+async def unload(ctx, extension):
+    bot.unload_exntension(f'cogs.{extension}')
 
-    else:
-        bot.unload_extension(f'cogs.{cog}')
-        bot.load_extension(f'cogs.{cog}')
-        cog1 = f'cog `{cog}`'
 
-    await ctx.send(f"Successfully reloaded {cog}")
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        bot.load_extension(f'cogs.{filename[:-3]}')
 
 
 bot.run(DISCORD_TOKEN)
