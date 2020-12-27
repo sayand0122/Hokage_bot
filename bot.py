@@ -1,11 +1,14 @@
+import re
 import discord
 import os
 import dotenv
+import random
+
+from roast import insult
 
 from discord.ext import commands
 from datetime import datetime
 from dotenv.main import load_dotenv
-import os
 
 """
     Loads environment variables from .env.
@@ -33,24 +36,10 @@ async def ping(ctx):
     await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
 
 
-# maintaining cogs
-@client.command()
-async def load(ctx, extension):
-    client.load_exntension(f'cogs.{extension}')
-
-
-@client.command()
-async def unload(ctx, extension):
-    client.unload_exntension(f'cogs.{extension}')
-for filename in os.listdir('./cogs'):
-    if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[:-3]}')
-
-
-@bot.command(aliases=['slap', 'destroy'])
+@bot.command(aliases=['slam'])
 async def roast(ctx, *, link):
     embed = discord.Embed(title='Roast', color=0x11ad4b)
-    embed.add_field(name='😈', value=f'{link} , {os.urandom.choice(roast)}')
+    embed.add_field(name='😈', value=f'{link} , {random.choice(insult)}')
     await ctx.send(embed=embed)
 
 bot.run(TOKEN)
