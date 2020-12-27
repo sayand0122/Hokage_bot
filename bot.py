@@ -12,7 +12,7 @@ import os
     Initializes TOKEN as bot token.
 """
 load_dotenv()
-TOKEN = os.environ.get('SECRET')
+DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='.')
 
@@ -34,6 +34,27 @@ async def ping(ctx):
     await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
 
 
+@bot.command(hidden=True)
+@commands.is_owner()
+async def reload(ctx, cog=None):
+    """
+        Hot reloading of cogs.
+    """
+    if cog is None:
+        for filename in os.listdir('./cogs'):
+            if filename.endswith('.py'):
+                bot.unload_extension(f'cogs.{filename[:-3]}')
+                bot.load_extension(f'cogs.{filename[:-3]}')
+                cog1 = 'all cogs'
+
+    else:
+        bot.unload_extension(f'cogs.{cog}')
+        bot.load_extension(f'cogs.{cog}')
+        cog1 = f'cog `{cog}`'
+
+    await ctx.send(f"Successfully reloaded {cog}")
+
+
 """
     Loads cogs from ./cogs directory.
     Make sure your file name starts with '_' if you dont want it to load just yet. 
@@ -47,4 +68,4 @@ for cog in os.listdir(r"./cogs"):
             print(f"{cog} can not be loaded\n{e}")
 
 
-bot.run(TOKEN)
+bot.run(DISCORD_TOKEN)
