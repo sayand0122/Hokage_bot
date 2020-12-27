@@ -5,7 +5,6 @@ import dotenv
 from discord.ext import commands
 from datetime import datetime
 from dotenv.main import load_dotenv
-import os
 
 """
     Loads environment variables from .env.
@@ -26,12 +25,12 @@ async def on_ready():
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
 
-# ping it and it returns your latency
+# maintaining cogs
 
 
 @bot.command()
-async def ping(ctx):
-    await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
+async def load(ctx, extension):
+    bot.load_extension(f'cogs.{extension}')
 
 
 @bot.command(hidden=True)
