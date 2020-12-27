@@ -1,10 +1,6 @@
-import re
 import discord
 import os
 import dotenv
-import random
-
-from roast import insult
 
 from discord.ext import commands
 from datetime import datetime
@@ -29,17 +25,28 @@ async def on_ready():
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
 
+# maintaining cogs
+
+
+@bot.command()
+async def load(ctx, extension):
+    bot.load_extension(f'cogs.{extension}')
+
+
+@bot.command()
+async def unload(ctx, extension):
+    bot.unload_exntension(f'cogs.{extension}')
+
+
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        bot.load_extension(f'cogs.{filename[:-3]}')
+
 
 # ping it and it returns your latency
 @bot.command()
 async def ping(ctx):
     await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
 
-
-@bot.command(aliases=['slam'])
-async def roast(ctx, *, link):
-    embed = discord.Embed(title='Roast', color=0x11ad4b)
-    embed.add_field(name='😈', value=f'{link} , {random.choice(insult)}')
-    await ctx.send(embed=embed)
 
 bot.run(TOKEN)
