@@ -6,14 +6,15 @@ import dotenv
 from dotenv.main import load_dotenv
 import os
 
+
 """
     Loads environment variables from .env.
     Initializes TOKEN as bot token.
 """
 load_dotenv()
-DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
+TOKEN = os.environ.get('TOKEN')
 
-bot = commands.Bot(command_prefix='.')
+bot = commands.Bot(command_prefix=',')
 
 
 @bot.event
@@ -24,7 +25,7 @@ async def on_ready():
     """
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
-
+    
 
 @bot.command(hidden=True)
 @commands.is_owner()
@@ -32,21 +33,21 @@ async def reload(ctx, cog=None):
     """
         Hot reloading of cogs.
     """
-    cog1 = ''
+    cog1 = None
+    
     if cog is None:
         for filename in os.listdir('./cogs'):
             if filename.endswith('.py'):
                 bot.unload_extension(f'cogs.{filename[:-3]}')
                 bot.load_extension(f'cogs.{filename[:-3]}')
                 cog1 = 'all cogs'
-
     else:
-            bot.unload_extension(f'cogs.{cog}')
-            bot.load_extension(f'cogs.{cog}')
-            cog1 = f'cog `{cog}`'
+        bot.unload_extension(f'cogs.{cog}')
+        bot.load_extension(f'cogs.{cog}')
+        cog1 = f'cog `{cog}`'
 
     await ctx.send(f"Successfully reloaded {cog1}")
-
+    
 
 """
     Loads cogs from ./cogs directory.
@@ -61,4 +62,4 @@ for cog in os.listdir(r"./cogs"):
             print(f"{cog} can not be loaded\n{e}")
 
 
-bot.run(DISCORD_TOKEN)
+bot.run(TOKEN)
