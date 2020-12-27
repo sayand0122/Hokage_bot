@@ -25,9 +25,8 @@ async def on_ready():
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
 
+
 # maintaining cogs
-
-
 @bot.command()
 async def load(ctx, extension):
     bot.load_extension(f'cogs.{extension}')
@@ -39,6 +38,7 @@ async def reload(ctx, cog=None):
     """
         Hot reloading of cogs.
     """
+    cog1 = ''
     if cog is None:
         for filename in os.listdir('./cogs'):
             if filename.endswith('.py'):
@@ -51,7 +51,7 @@ async def reload(ctx, cog=None):
         bot.load_extension(f'cogs.{cog}')
         cog1 = f'cog `{cog}`'
 
-    await ctx.send(f"Successfully reloaded {cog}")
+    await ctx.send(f"Successfully reloaded {cog1}")
 
 
 bot.run(DISCORD_TOKEN)
