@@ -1,11 +1,11 @@
 import asyncio
-from pprint import pprint
 
 from youtube_dl import YoutubeDL
 import pafy
 
 import validators
-from pprint import pprint
+from datetime import datetime
+# from pprint import pprint
 
 import discord
 from discord.ext import commands
@@ -15,6 +15,7 @@ from discord import FFmpegPCMAudio
 class Player(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.queue = []
         self.YDL_OPTIONS = {
             'format': 'bestaudio', 
             'noplaylist': 'True',
@@ -36,7 +37,7 @@ class Player(commands.Cog):
         
         # Joins song keywords exactly as user provided.
         playable = ' '.join(playable[:])
-        thumnail = None
+        views = 0
         
         try:   
             if validators.url(playable):
@@ -48,38 +49,63 @@ class Player(commands.Cog):
                     info = info['entries'][0]
             
             url = info['formats'][0]['url']
-            thumbnail = info['thumbnail']
-            webpage = info['webpage_url']
+            thumbnail_url = info['thumbnail']
+            webpage_url = info['webpage_url']
             title = info['title']
             uploader = info['uploader']
-            channel_url = info['channel_url']
-            views = pafy.new(webpage).viewcount
-            print(views)
-            # pprint(info)
+            channel_url = info['channel_url'] 
+            
+            # youtube_dl doesnt give accurate view count above 100M (Havent checked for a lesser amount once I discovered this)
+            video = pafy.new(webpage_url)
+            views = video.viewcount
+            duration = video.duration
+            
+            vc = ctx.author.voice.channel
+            vc = await vc.connect()
             
             embed = discord.Embed()
-            embed.set_thumbnail(url=thumbnail)
-            embed.add_field(name='\u200b', value=f'**[{title}]({webpage})**')
+            embed.set_image(url=thumbnail_url)
+            embed.add_field(name='\u200b', value=f'**[{title}]({webpage_url})**')
             embed.add_field(name='\u200b', value=f'**[{uploader}]({channel_url})**', inline=False)
-            embed.add_field(name='Views', value=f'{views}', inline=False)
-            
+            embed.add_field(name='Views', value=f'{views}')        
+            embed.add_field(name='Duration', value=f'{duration}')  
             await ctx.send(embed=embed)
             
-            # vc = ctx.author.voice.channel
-            # vc = await vc.connect()
-            # vc.play(FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS))
+            
+            vc.play(FFmpegPCMAudio(url, **self.FFMPEG_OPTIONS))
         except Exception as e:
             pass
             
 
-    @commands.command(aliases=['leave'])
+    @commands.command(aliases=['leave', 'stop'])
     async def quit(self, ctx):
         """
             Leaves the vc in the server it was prompted in.
         """
         vc = get(self.bot.voice_clients, guild=ctx.message.guild)
         if vc:
+            vc.stop()
             await vc.disconnect()
+            
+    
+    @commands.command()
+    async def pause(self, ctx):
+        """
+            Pauses vc in the server it was prompted in.
+        """
+        vc = get(self.bot.voice_clients, guild=ctx.message.guild)
+        if vc:
+            vc.pause()
+            
+    
+    @commands.command()
+    async def resume(self, ctx):
+        """
+            Resumes vc in the server it was prompted in.
+        """
+        vc = get(self.bot.voice_clients, guild=ctx.message.guild)
+        if vc:
+            vc.resume()
 
 
 def setup(bot):
