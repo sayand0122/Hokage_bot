@@ -1,17 +1,22 @@
 import discord
 import os
 import dotenv
+import pymongo
 
 from discord.ext import commands
 from datetime import datetime
 from dotenv.main import load_dotenv
+from pymongo import MongoClient
 
 """
     Loads environment variables from .env.
     Initializes TOKEN as bot token.
 """
 load_dotenv()
+
 DISCORD_TOKEN = os.environ.get('SECRET')
+
+mongo_url = os.environ.get("mongo_url")
 
 bot = commands.Bot(command_prefix='.')
 
@@ -25,7 +30,9 @@ async def on_ready():
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
 
-# maintaining cogs
+    cluster = MongoClient(mongo_url)
+    db = cluster['hokage-base']
+    collection = db['data']
 
 
 # maintaining cogs
