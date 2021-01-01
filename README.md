@@ -1,5 +1,5 @@
 # This bot is still under development && if you want to extend a hand to its contribution feel free to join the server below
-<a href="https://discord.io/HokageTesting"><img src="" alt="Link to discord server"><br>
+<a href="https://discord.io/HokageTesting"><img src="https://discord.com/api/guilds/792240009503440906/widget.png" alt="Link to discord server"><br>
 
 # Hokage Bot
 
