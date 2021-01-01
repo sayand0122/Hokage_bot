@@ -1,5 +1,4 @@
 discord.py
 asyncio
 youtube_dl
-pafy
-validators
+pymongo

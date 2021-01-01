@@ -1,6 +1,7 @@
 import discord
 import os
 import dotenv
+import pymongo
 
 from discord.ext import commands
 from datetime import datetime
@@ -11,7 +12,10 @@ from dotenv.main import load_dotenv
     Initializes TOKEN as bot token.
 """
 load_dotenv()
-DISCORD_TOKEN = os.environ.get('DISCORD_TOKEN')
+
+DISCORD_TOKEN = os.environ.get('SECRET')
+
+mongo_url = os.environ.get("mongo_url")
 
 bot = commands.Bot(command_prefix='.')
 
@@ -54,28 +58,6 @@ async def unload(ctx, extension):
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         bot.load_extension(f'cogs.{filename[:-3]}')
-
-
-# @bot.command(hidden=True)
-# @commands.is_owner()
-# async def reload(ctx, cog=None):
-#     """
-#         Hot reloading of cogs.
-#     """
-#     cog1 = ''
-#     if cog is None:
-#         for filename in os.listdir('./cogs'):
-#             if filename.endswith('.py'):
-#                 bot.unload_extension(f'cogs.{filename[:-3]}')
-#                 bot.load_extension(f'cogs.{filename[:-3]}')
-#                 cog1 = 'all cogs'
-
-#     else:
-#         bot.unload_extension(f'cogs.{cog}')
-#         bot.load_extension(f'cogs.{cog}')
-#         cog1 = f'cog `{cog}`'
-
-#     await ctx.send(f"Successfully reloaded {cog1}")
 
 
 bot.run(DISCORD_TOKEN)

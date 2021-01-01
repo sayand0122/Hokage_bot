@@ -1,4 +1,3 @@
-
 import discord
 from discord.ext import commands
 import random
@@ -9,6 +8,8 @@ class roast(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.insults = insult
+        self.colors = colors
+        self.master = master
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -16,10 +17,19 @@ class roast(commands.Cog):
 
     @commands.command(aliases=['slam'])
     async def roast(self, ctx, *, link):
-        embed = discord.Embed(title='Roast', color=0x11ad4b)
-        embed.add_field(
-            name='😈', value=f'{link} , {random.choice(self.insults)}')
-        await ctx.send(embed=embed)
+        if link == '<@!771375992853626921>':
+            embed = discord.Embed(
+                title='Roast', color=0xe30b0b)
+            embed.add_field(
+                name='😡', value=f'{random.choice(self.master)}')
+            await ctx.send(embed=embed)
+
+        else:
+            embed = discord.Embed(
+                title='Roast', color=random.choice(self.colors))
+            embed.add_field(
+                name='😈', value=f'{link} , {random.choice(self.insults)}')
+            await ctx.send(embed=embed)
 
 
 insult = ["You have your entire life to be a jerk. Why not take today off?",
@@ -74,6 +84,16 @@ insult = ["You have your entire life to be a jerk. Why not take today off?",
           "Wow you have a really smart brain, wait no, I take that back, you have a really smart mouth",
           "I'd call you a donkey but you look more like shrek.",
           "If your so smart then you’d realize your proof of reverse evolution"]
+
+
+colors = [0xa84432, 0xeb1c09, 0xf25f0a, 0xf2820a, 0x80b30b, 0x30941c, 0x53bd7c, 0x0ccfae, 0x09aab3,
+          0x0983b3, 0x03439c, 0x514cc2, 0x774cc2, 0x8802db, 0xbc0bd4, 0xd40bb9, 0xd40b73, 0xd40b4e, 0xcfcccd, 0xab3a60]
+
+
+master = ['How dare you ROAST your MASTER', 'Keep calm and stop roasting me',
+          'Damn it roast your friends instead', "i like your guts but slamming me isn't gonna help",
+          'Just STOP', 'Get some brains instead', 'You dare awaken me from sleep', "I'm the boss here stop slamming me",
+          'Come... into the unknown']
 
 
 def setup(bot):
