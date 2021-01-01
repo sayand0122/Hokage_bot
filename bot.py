@@ -30,10 +30,6 @@ async def on_ready():
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
 
-    cluster = MongoClient(mongo_url)
-    db = cluster['hokage-base']
-    collection = db['data']
-
 
 # maintaining cogs
 @bot.command()
