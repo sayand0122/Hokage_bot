@@ -67,7 +67,8 @@ class Audio():
         song_embed.add_field(name='\u200b', value=f'**[{self.title}]({webpage_url})**')
         song_embed.add_field(name='\u200b', value=f'**[{uploader}]({channel_url})**', inline=False)
         song_embed.add_field(name='Views', value=f'{views}')        
-        song_embed.add_field(name='Duration', value=f'{duration}')         
+        song_embed.add_field(name='Duration', value=f'{duration}')      
+        song_embed.add_field(name='Requested by', value=f'{self.requester.mention}')   
         self.embed = song_embed  
 
 
@@ -279,11 +280,12 @@ class Music(commands.Cog):
         if not vc or not vc.is_connected():
             return
         
-        player = self.get_player()
+        player = self.get_player(ctx)
         
         desc = player.current.title
         if desc:
             embed = discord.Embed(title='Currently Playing', description=desc)
+            await ctx.send(embed=embed)
              
 
 def setup(bot):
