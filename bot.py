@@ -14,7 +14,7 @@ Initializes TOKEN as bot token.
 load_dotenv()
 TOKEN = os.environ.get('TOKEN')
 
-bot = commands.Bot(command_prefix=',')
+bot = commands.Bot(command_prefix='.')
 
 @bot.event
 async def on_ready():
