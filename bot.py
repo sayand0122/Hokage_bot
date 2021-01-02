@@ -7,28 +7,28 @@ from discord.ext import commands
 from datetime import datetime
 from dotenv.main import load_dotenv
 
+
 """
-    Loads environment variables from .env.
-    Initializes TOKEN as bot token.
+Loads environment variables from .env.
+Initializes TOKEN as bot token.
 """
 load_dotenv()
 
-DISCORD_TOKEN = os.environ.get('SECRET')
+DISCORD_TOKEN = os.environ.get('TOKEN')
 
-mongo_url = os.environ.get("mongo_url")
 
 bot = commands.Bot(command_prefix='.')
-
 
 @bot.event
 async def on_ready():
     """
-        Sends a message in terminal with start time.
-        Primary use is just for logging.
+    Sends a message in terminal with start time.
+    Primary use is just for logging.
     """
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
 
+    
 
 # clear commands and its error handling
 @bot.command()
@@ -61,3 +61,4 @@ for filename in os.listdir('./cogs'):
 
 
 bot.run(DISCORD_TOKEN)
+
