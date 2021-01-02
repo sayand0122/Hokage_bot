@@ -2,3 +2,7 @@ discord.py
 asyncio
 youtube_dl
 pymongo
+itertools
+async-timeout
+validator-collection
+pafy
