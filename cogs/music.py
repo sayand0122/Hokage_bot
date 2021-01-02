@@ -12,21 +12,25 @@ import pafy
 
 class Audio():
     """Creates an audio object with relevant data."""
-    
+
     def __init__(self, search, requester):
         self.requester = requester
         self.audio = None
-        self.title = None   
+        self.title = None
         self.search = search
         self.embed = None
         self.gather_stream()
-    
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print('Music cog is ready')
+
     def gather_stream(self):
         """Gathers audio stream and relevant info."""
         ffmpegopts = {
-        'before_options': '-nostdin',
-        'options': '-vn'
-        }   
+            'before_options': '-nostdin',
+            'options': '-vn'
+        }
         ytdlopts = {
             'format': 'bestaudio/best',
             'outtmpl': 'downloads/%(extractor)s-%(id)s-%(title)s.%(ext)s',
@@ -40,33 +44,36 @@ class Audio():
             'default_search': 'auto',
             'source_address': '0.0.0.0'  # ipv6 addresses cause issues sometimes
         }
-        
+
         ytdl = YoutubeDL(ytdlopts)
-        
+
         data = ytdl.extract_info(self.search, download=False)
-        
+
         if not checkers.is_url(self.search):
             data = data['entries'][0]
-        
+
         self.audio = FFmpegPCMAudio(data['formats'][0]['url'], **ffmpegopts)
         thumbnail_url = data['thumbnail']
         webpage_url = data['webpage_url']
         self.title = data['title']
         uploader = data['uploader']
-        channel_url = data['channel_url']      
+        channel_url = data['channel_url']
         # youtube_dl doesnt give accurate view count above 100M (Havent checked for a lesser amount once I discovered this).
         video = pafy.new(webpage_url)
         views = video.viewcount
-        duration = video.duration  
-        
+        duration = video.duration
+
         song_embed = discord.Embed()
         song_embed.set_image(url=thumbnail_url)
-        song_embed.add_field(name='\u200b', value=f'**[{self.title}]({webpage_url})**')
-        song_embed.add_field(name='\u200b', value=f'**[{uploader}]({channel_url})**', inline=False)
-        song_embed.add_field(name='Views', value=f'{views}')        
-        song_embed.add_field(name='Duration', value=f'{duration}')      
-        song_embed.add_field(name='Requested by', value=f'{self.requester.mention}')   
-        self.embed = song_embed  
+        song_embed.add_field(
+            name='\u200b', value=f'**[{self.title}]({webpage_url})**')
+        song_embed.add_field(
+            name='\u200b', value=f'**[{uploader}]({channel_url})**', inline=False)
+        song_embed.add_field(name='Views', value=f'{views}')
+        song_embed.add_field(name='Duration', value=f'{duration}')
+        song_embed.add_field(name='Requested by',
+                             value=f'{self.requester.mention}')
+        self.embed = song_embed
 
 
 class MusicPlayer:
@@ -80,7 +87,7 @@ class MusicPlayer:
         self._guild = ctx.guild
         self._channel = ctx.channel
         self._cog = ctx.cog
-        
+
         self.current = None
 
         self.queue = asyncio.Queue()
@@ -102,11 +109,12 @@ class MusicPlayer:
                     self.current = source
             except asyncio.TimeoutError:
                 return self.destroy(self._guild)
-            
-            self._guild.voice_client.play(source.audio, after=lambda _: self.bot.loop.call_soon_threadsafe(self.next.set))
-            
+
+            self._guild.voice_client.play(
+                source.audio, after=lambda _: self.bot.loop.call_soon_threadsafe(self.next.set))
+
             await self.next.wait()
-            
+
     def destroy(self, guild):
         """Disconnect and cleanup the player."""
         return self.bot.loop.create_task(self._cog.cleanup(guild))
@@ -129,7 +137,7 @@ class Music(commands.Cog):
             del self.players[guild.id]
         except KeyError:
             pass
-            
+
     async def __local_check(self, ctx):
         """A local check which applies to all commands in this cog."""
         if not ctx.guild:
@@ -159,7 +167,7 @@ class Music(commands.Cog):
     async def connect(self, ctx):
         """Connect to voice the user is in."""
         channel = None
-        
+
         try:
             channel = ctx.author.voice.channel
         except AttributeError:
@@ -167,18 +175,16 @@ class Music(commands.Cog):
 
         vc = ctx.voice_client
 
-
         if vc:
             try:
                 await vc.move_to(channel)
             except asyncio.TimeoutError:
-                print('Connection failed')           
+                print('Connection failed')
         else:
             try:
                 await channel.connect()
             except asyncio.TimeoutError:
                 print('Connection failed')
-
 
     @commands.command(name='play', aliases=['sing'])
     async def play_(self, ctx, *search: str):
@@ -188,16 +194,16 @@ class Music(commands.Cog):
             search (str): keywords for querying the song on youtube.
         """
         search = ' '.join(search[:])
-   
+
         vc = ctx.voice_client
-        
-        if not vc:        
+
+        if not vc:
             await self.connect(ctx)
-            
+
         player = self.get_player(ctx)
 
         source = Audio(search, ctx.message.author)
-        await ctx.send(embed=source.embed)  
+        await ctx.send(embed=source.embed)
 
         await player.queue.put(source)
 
@@ -207,7 +213,7 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_playing():
-            return 
+            return
         elif vc.is_paused():
             return
 
@@ -219,7 +225,7 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return 
+            return
         elif not vc.is_paused():
             return
 
@@ -231,7 +237,7 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return 
+            return
 
         if vc.is_paused():
             pass
@@ -252,7 +258,7 @@ class Music(commands.Cog):
         if player.queue.empty():
             return await ctx.send('There are currently no more queued songs.')
 
-        # Queries upto 5 songs in the queue. 
+        # Queries upto 5 songs in the queue.
         upcoming = list(itertools.islice(player.queue._queue, 0, 5))
 
         desc = '\n'.join(f'**`{_.title}`**' for _ in upcoming)
@@ -266,26 +272,25 @@ class Music(commands.Cog):
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
-            return 
+            return
 
         await self.cleanup(ctx.guild)
-        
+
     @commands.command()
     async def current(self, ctx):
         """Displays current track."""
         vc = ctx.voice_client
-        
+
         if not vc or not vc.is_connected():
             return
-        
+
         player = self.get_player(ctx)
-        
+
         desc = player.current.title
         if desc:
             embed = discord.Embed(title='Currently Playing', description=desc)
             await ctx.send(embed=embed)
-             
+
 
 def setup(bot):
     bot.add_cog(Music(bot))
-
