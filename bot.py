@@ -8,7 +8,8 @@ import dotenv
 from dotenv.main import load_dotenv
 
 
-"""Loads environment variables from .env.
+"""
+Loads environment variables from .env.
 Initializes TOKEN as bot token.
 """
 load_dotenv()
@@ -17,12 +18,15 @@ DISCORD_TOKEN = os.environ.get('TOKEN')
 
 bot = commands.Bot(command_prefix='.')
 
+
 @bot.event
 async def on_ready():
     launch_time = datetime.now()
     print(f"Started at {launch_time}")
 
 # clear commands and its error handling
+
+
 @bot.command()
 @commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount: int):
@@ -35,6 +39,8 @@ async def clear_error(ctx, error):
         await ctx.send("Please pass the amount to clear the number of data.")
 
 # maintaining cogs
+
+
 @bot.command()
 async def load(ctx, extension):
     bot.load_extension(f'cogs.{extension}')
