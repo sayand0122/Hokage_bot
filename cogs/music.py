@@ -1,7 +1,4 @@
 import discord
-from discord import embeds
-from discord import player
-from discord import voice_client
 from discord.ext import commands
 from discord import FFmpegPCMAudio
 
