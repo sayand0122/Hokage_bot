@@ -12,7 +12,7 @@ Loads environment variables from .env.
 Initializes TOKEN as bot token.
 """
 load_dotenv()
-TOKEN = os.environ.get('TOKEN')
+DISCORD_TOKEN = os.environ.get('TOKEN')
 
 bot = commands.Bot(command_prefix='.')
 
@@ -56,4 +56,4 @@ for cog in os.listdir(r"./cogs"):
         except Exception as e:
             print(f"{cog} can not be loaded\n{e}")
 
-bot.run(TOKEN)
+bot.run(DISCORD_TOKEN)
