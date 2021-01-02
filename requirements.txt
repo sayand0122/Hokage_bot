@@ -1,2 +1,4 @@
-python 3.8
-discord.py 1.5
+discord.py
+asyncio
+youtube_dl
+pymongo

@@ -167,6 +167,7 @@ class Music(commands.Cog):
 
         vc = ctx.voice_client
 
+
         if vc:
             try:
                 await vc.move_to(channel)
@@ -287,3 +288,4 @@ class Music(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Music(bot))
+
