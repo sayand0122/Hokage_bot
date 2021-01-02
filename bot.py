@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 
 import os
-import pymongo
 from datetime import datetime
 import dotenv
 from dotenv.main import load_dotenv
