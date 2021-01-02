@@ -4,6 +4,7 @@
 <br />
 This bot is still under development && if you want to extend a hand to its contribution feel free to join the server below
 <br />
+<br />
 <p align='center'>
 <a href="https://discord.io/HokageTesting"><img src="https://discord.com/api/guilds/792240009503440906/widget.png?style=banner2" alt="Link to discord server"><br>
 <a href="https://www.python.org/"><img src="http://ForTheBadge.com/images/badges/made-with-python.svg" alt="made with Python"></a>
@@ -12,14 +13,41 @@ This bot is still under development && if you want to extend a hand to its contr
 <a href="https://github.com/Rapptz/discord.py/releases/tag/v1.5.0"><img src="https://img.shields.io/badge/discord.py-v1.5.0-7289da.svg?style=flat-square" alt="discord.py version"></a>
 </p>
   
-### Setup
+### Setup:
 
 To run this on your device, clone this repo `$cd git clone https://github.com/c-code-x/Hokage_bot.git` and create a `.env` file in the initial directory with your bot token as a string variable `TOKEN`.
 
-### Requirements
+
+### To contribute changes follow these steps:
+
+**Note**: Make sure you have been assigned the issue to which you are making a PR. If you make PR before being assigned, It will be labeled invalid and closed without merging.
+
+
+1. Add a upstream link to main branch in your cloned repo
+  ```
+  git remote add upstream https://github.com/c-code-x/Hokage_bot.git
+  ```
+2. Keep your cloned repo upto date by pulling from upstream (this will also avoid any merge conflicts while committing new changes)
+  ```
+  git pull upstream main
+  ```
+3. Create your feature branch
+  ```
+  git checkout -b <feature-name>
+  ```
+4. Commit all the changes
+  ```
+  git commit -am "Meaningful commit message"
+  ```
+5. Push the changes for review
+  ```
+  git push origin <branch-name>
+  ```
+6. Create a PR from our repo on Github.
+
+### Requirements:
 
 [requirements.txt](requirements.txt)
-
 
 
 # ***CONTRIBUTORS***
