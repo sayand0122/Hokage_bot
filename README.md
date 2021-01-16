@@ -9,7 +9,7 @@ This bot is still under development && if you want to extend a hand to its contr
 <a href="https://discord.io/HokageTesting"><img src="https://discord.com/api/guilds/792240009503440906/widget.png?style=banner2" alt="Link to discord server"><br>
 <a href="https://www.python.org/"><img src="http://ForTheBadge.com/images/badges/made-with-python.svg" alt="made with Python"></a>
 <a href="https://github.com/sayand0122/"><img src="http://ForTheBadge.com/images/badges/built-with-love.svg" alt="built with Love"></a><br>
-<a href="https://raw.githubusercontent.com/c-code-x/Hoakge_bot/main/LICENSE"><img src="https://img.shields.io/github/license/c-code-x/Hokage_bot?style=flat-square" alt="MIT license"></a>
+<a href="https://raw.githubusercontent.com/sayand0122/Hokage_bot/main/LICENSE"><img src="https://img.shields.io/github/license/sayand0122/Hokage_bot?style=flat-square" alt="MIT license"></a>
 <a href="https://github.com/Rapptz/discord.py/releases/tag/v1.5.0"><img src="https://img.shields.io/badge/discord.py-v1.5.0-7289da.svg?style=flat-square" alt="discord.py version"></a>
 </p>
   
