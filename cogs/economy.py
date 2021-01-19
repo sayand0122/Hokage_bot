@@ -21,7 +21,7 @@ class economy(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('Roast cog is ready')
+        print('Economy cog is ready')
 
     async def update_data(user):
         '''
